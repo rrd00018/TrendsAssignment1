@@ -81,3 +81,11 @@ std::ostream &operator<<(std::ostream &os, const Rule &rule) {
 bool Rule::isDefeasible() const {
     return defeasible;
 }
+
+bool Rule::operator==(const Rule &rhs) const {
+    return id == rhs.id;
+}
+
+bool Rule::operator!=(const Rule &rhs) const {
+    return !(rhs == *this);
+}

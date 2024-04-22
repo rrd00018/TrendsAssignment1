@@ -50,9 +50,8 @@ std::ostream &operator<<(std::ostream &os, const Argument &argument){
     }
     os << " supportingArguments: ";
     for(auto i : argument.supportingArguments){
-        os << i << " ";
+        os << i->id << " ";
     }
-    os << " attacks: " << argument.attacks.size();
     return os;
 }
 

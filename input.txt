@@ -1,6 +1,8 @@
-L {a,b,c,f}
+L {a,b,c,d,e,f,g}
 D a->b
 D b->c
+D d->e
 S f->~b
+S g->h
 Kn {a,f}
-Kp {b}
+Kp {b,d}

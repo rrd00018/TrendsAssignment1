@@ -49,6 +49,10 @@ public:
 
     const std::vector<Rule> &getTopRules() const;
 
+    Rule* findRule(Rule* rule, bool strict);
+
+    Argument* findArgument(Argument* arg);
+
 };
 
 

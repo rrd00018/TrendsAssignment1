@@ -32,7 +32,6 @@ bool Formula::operator!=(const Formula &rhs) const {
 }
 
 std::ostream &operator<<(std::ostream &os, const Formula &formula) {
-    os << "element: ";
     if(formula.negated){
         os << "~";
     }

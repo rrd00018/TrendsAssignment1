@@ -38,7 +38,7 @@ void argumentBuilder::loadData(std::string path) {
                     }
                     case 'D': {
                         std::string lineWithoutD = line.substr(2,line.length());
-                        std::string id = "d " + std::to_string(defeasible);
+                        std::string id = "d" + std::to_string(defeasible);
                         defeasible++;
                         Rule regla(lineWithoutD, true, id,this);
                         defeasibleRules.push_back(regla);
@@ -46,7 +46,8 @@ void argumentBuilder::loadData(std::string path) {
                     }
                     case 'S': {
                         std::string lineWithoutS = line.substr(2,line.length());
-                        std::string id = "s" + strict;
+                        std::string id = "s" + std::to_string(strict);
+                        strict++;
                         Rule regla(lineWithoutS, false,id,this);
                         topRules.push_back(regla);
                         break;
@@ -121,18 +122,20 @@ void argumentBuilder::checkRules(bool strict) {
     for(auto i : *set){ //Recorro las rules
         bool found = true;
         std::unordered_set<Argument*> subArguments;
-        std::unordered_set<Formula*> argumentPremises;
+        std::unordered_set<Formula*> argumentConclussions;
         std::unordered_set<Rule*> supportingRule;
         for(auto j : i.getConditions()){ //Si para cada condicion de las rules esta en lo conocido, la conclusion se mete en lo conocido
             if(axioms.find(j) != axioms.end()){
-                argumentPremises.insert(j);
+                argumentConclussions.insert(j);
+                found = true;
+                break;
             }
             bool foundInArgument = false;
             for(auto k : arguments){
                 if(k.getConclusion().find(j) != k.getConclusion().end()){
                     foundInArgument = true; //Encuentra
                     //addSupportingArgumentsRecursive(&k,subArguments);
-                    subArguments.insert(&k);
+                    subArguments.insert(const_cast<Argument *>(&(*arguments.find(k))));
                 }
             }
             if(!foundInArgument){
@@ -140,13 +143,19 @@ void argumentBuilder::checkRules(bool strict) {
             }else{
                 found = true;
             }
+            if(!found){
+                break;
+            }
         }
         if(found){ //Si se encuentra entonces se crea un argumento con eso
-            supportingRule.insert(&i);
-            for(auto element : i.getResults()){
-                argumentPremises.insert(element);
+            Rule* r = findRule(&i,strict);
+            if(r) {
+                supportingRule.insert(r);
             }
-            Argument arg(argumentPremises,supportingRule,subArguments);
+            for(auto element : i.getResults()){
+                argumentConclussions.insert(element);
+            }
+            Argument arg(argumentConclussions, supportingRule, subArguments);
             arguments.insert(arg);
         }
     }
@@ -163,12 +172,10 @@ void argumentBuilder::checkAttacks() {
                 }else if(undermine(&argument,&argument2)){
                     argument.insertAttack(&argument2);
                     std::string atack = std::to_string(argument.getId()) + "," + std::to_string(argument2.getId()) + "," + std::to_string(2);
-                    std::cout << atack << std::endl;
                     attacksAndReasons.push_back(atack);
                 }else if(rebut(&argument,&argument2)){
                     argument.insertAttack(&argument2);
                     std::string atack = std::to_string(argument.getId()) + "," + std::to_string(argument2.getId()) + "," + std::to_string(3);
-                    std::cout << atack << std::endl;
                     attacksAndReasons.push_back(atack);
                 }
             }
@@ -236,4 +243,26 @@ const std::vector<Rule> &argumentBuilder::getDefeasibleRules() const {
 
 const std::vector<Rule> &argumentBuilder::getTopRules() const {
     return topRules;
+}
+
+Rule *argumentBuilder::findRule(Rule *rule, bool strict) {
+    if(strict){
+        for(int i = 0; i < topRules.size(); i++){
+            if(topRules[i] == *rule){
+                return &topRules[i];
+            }
+        }
+    }else{
+        for(int i = 0; i < defeasibleRules.size(); i++){
+            if(defeasibleRules[i] == *rule){
+                return &defeasibleRules[i];
+            }
+        }
+    }
+    return nullptr;
+}
+
+Argument *argumentBuilder::findArgument(Argument *arg) {
+    Argument* salida = const_cast<Argument *>(&(*arguments.find(*arg)));
+    return salida;
 }

@@ -23,3 +23,10 @@ S p,q->r
 S v->~s,v
 Kn {p}
 Kp {s,u,x}
+
+L {a,b,c,f}
+D a->b
+D b->c
+S f->~b
+Kn {a,f}
+Kp {}

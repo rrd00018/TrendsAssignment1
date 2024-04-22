@@ -29,6 +29,10 @@ public:
 
     friend std::ostream &operator<<(std::ostream &os, const Rule &rule);
 
+    bool operator==(const Rule &rhs) const;
+
+    bool operator!=(const Rule &rhs) const;
+
     bool isDefeasible() const;
 };
 

@@ -24,6 +24,8 @@ int main(int argc, char* argv[]) {
     std::string path1 = "C:\\Users\\Rafa\\Documents\\UJA\\Tercero\\IA\\input.txt";
     argumentBuilder builder;
     builder.loadData("C:\\Users\\Rafa\\Documents\\UJA\\Tercero\\IA\\input.txt");
+
+
     builder.run();
     //argumentSolver(argc,argv);
 
