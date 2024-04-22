@@ -1,0 +1,6 @@
+L {a,b,c,f}
+D a->b
+D b->c
+S f->~b
+Kn {a,f}
+Kp {b}

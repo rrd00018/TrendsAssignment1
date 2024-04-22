@@ -1,0 +1,25 @@
+Defeasible rule -> dX; X = number
+Top rule -> SX; X = number
+Premises -> prem{X}; X =
+
+knowledge base -> {p,q,r,s,t,u,v,w,x,d1,d2,d3,d4,d5,d6}
+Negations -> Rs = {s1,s2}
+Rd = {d1,d2,d3,d4,d5,d6}
+Kn -> {p}
+Kp -> {s,u,x}
+
+Input: knowledge base d1 d2 d3 (cada d realmente implica las reglas) NumeroDeS S1 S2 Sn Kn Kp
+
+La idea es guardar la knowledge base como elementos y usar el resto de contenedores como punteros a esos elementos
+
+L {p,q,r,s,t,u,v,w,x}
+D p->q
+D s->t
+D t->~d1
+D u->v
+D v,x->~t
+D s->~p
+S p,q->r
+S v->~s,v
+Kn {p}
+Kp {s,u,x}
